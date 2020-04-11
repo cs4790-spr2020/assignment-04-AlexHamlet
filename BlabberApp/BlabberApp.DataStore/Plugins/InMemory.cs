@@ -1,13 +1,12 @@
-﻿using BlabberApp.DataStore.Interfaces;
-using BlabberApp.Domain.Interfaces;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+using BlabberApp.DataStore.Interfaces;
+using BlabberApp.Domain.Entities;
+using BlabberApp.Domain.Interfaces;
 
 namespace BlabberApp.DataStore.Plugins
 {
-    class InMemory : IPlugin
+    public class InMemory : IBlabPlugin, IUserPlugin
     {
         private ArrayList buffer;
         public InMemory()
@@ -27,9 +26,24 @@ namespace BlabberApp.DataStore.Plugins
 
         public IEntity ReadById(Guid Id)
         {
-            foreach (IEntity obj in this.buffer)
+            foreach(IEntity obj in this.buffer)
             {
                 if (Id.Equals(obj.Id)) return obj;
+            }
+            return null;
+        }
+        public IEnumerable ReadByUserId(string Id)
+        {
+            return null;
+        }
+        public IEntity ReadByUserEmail(string email)
+        {
+            foreach(User user in buffer)
+            {
+                if (user.Email.Equals(email))
+                {
+                    return user;
+                }
             }
             return null;
         }
@@ -43,11 +57,6 @@ namespace BlabberApp.DataStore.Plugins
         public void Delete(IEntity obj)
         {
             this.buffer.Remove(obj);
-        }
-
-        public IEntity ReadByID(Guid ID)
-        {
-            throw new NotImplementedException();
         }
     }
 }

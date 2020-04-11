@@ -1,8 +1,6 @@
-﻿using BlabberApp.Domain.Interfaces;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+using BlabberApp.Domain.Interfaces;
 
 namespace BlabberApp.DataStore.Interfaces
 {
@@ -10,7 +8,7 @@ namespace BlabberApp.DataStore.Interfaces
     {
         void Create(IEntity obj);
         IEnumerable ReadAll();
-        IEntity ReadByID(Guid ID);
+        IEntity ReadById(Guid Id);
         void Update(IEntity obj);
         void Delete(IEntity obj);
     }

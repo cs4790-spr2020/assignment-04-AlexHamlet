@@ -1,17 +1,25 @@
-﻿using BlabberApp.Domain.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Net.Mail;
-using System.Text;
-
+using BlabberApp.Domain.Interfaces;
 namespace BlabberApp.Domain.Entities
 {
     public class User : IEntity
     {
-        public Guid Id { get; set; }
+        public Guid Id {get; set;}
         public System.DateTime RegisterDTTM { get; set; }
         public System.DateTime LastLoginDTTM { get; set; }
         public string Email { get; private set; }
+
+        public User()
+        {
+            this.Id = Guid.NewGuid();
+        }
+
+        public User(string email)
+        {
+            this.Id = Guid.NewGuid();
+            this.ChangeEmail(email); 
+        }
 
         public void ChangeEmail(string email)
         {
@@ -19,11 +27,11 @@ namespace BlabberApp.Domain.Entities
                 throw new FormatException("Email is invalid");
             try
             {
-                MailAddress m = new MailAddress(email);
+                MailAddress m = new MailAddress(email); 
             }
             catch (FormatException)
             {
-                throw new FormatException("Email is invalid");
+                throw new FormatException(email + " is invalid");
             }
             Email = email;
         }

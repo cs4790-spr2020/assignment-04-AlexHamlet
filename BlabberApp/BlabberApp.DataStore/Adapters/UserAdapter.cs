@@ -1,44 +1,47 @@
-﻿using BlabberApp.DataStore.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using BlabberApp.Domain.Entities;
 using System.Collections;
+using BlabberApp.DataStore.Interfaces;
+using BlabberApp.Domain.Entities;
 
 namespace BlabberApp.DataStore.Adapters
 {
-    class UserAdapter
+    public class UserAdapter
     {
-        private IPlugin plugin;
+       private readonly IUserPlugin _plugin;
 
-        public UserAdapter(IPlugin plugin)
-        {
-            this.plugin = plugin;
-        }
+       public UserAdapter(IUserPlugin plugin)
+       {
+           _plugin = plugin;
+       }
 
-        public void Add(User user)
-        {
-            this.plugin.Create(user);
-        }
+       public void Add(User user)
+       {
+           _plugin.Create(user);
+       }
 
-        public void Remove(User user)
-        {
-            this.plugin.Delete(user);
-        }
+       public void Remove(User user)
+       {
+           _plugin.Delete(user);
+       }
 
-        public void Update(User user)
-        {
-            this.plugin.Update(user);
-        }
+       public void Update(User user)
+       {
+           _plugin.Update(user);
+       }
 
-        public IEnumerable GetAll()
-        {
-            return this.plugin.ReadAll();
-        }
+       public IEnumerable GetAll()
+       {
+           return _plugin.ReadAll();
+       }
 
-        public User GetById(Guid Id)
-        {
-            return (User)this.plugin.ReadByID(Id);
-        }
+       public User GetById(Guid Id)
+       {
+           return (User)_plugin.ReadById(Id);
+       }
+
+       public User GetByEmail(string email)
+       {
+           return (User)_plugin.ReadByUserEmail(email);
+       }
     }
 }
