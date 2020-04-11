@@ -14,12 +14,6 @@ namespace BlabberApp.ServicesTest
         BlabServiceFactory harness = new BlabServiceFactory();
 
         [TestMethod]
-        public void CanaryTest()
-        {
-            Assert.AreEqual(true, true);
-        }
-
-        [TestMethod]
         public void BuildAdapterPluginTest()
         {
             //Arrange and Act

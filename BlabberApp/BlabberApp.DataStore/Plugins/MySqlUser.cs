@@ -8,37 +8,56 @@ using BlabberApp.Domain.Interfaces;
 
 namespace BlabberApp.DataStore.Plugins
 {
+    /// <summary>
+    /// Stores Users in database
+    /// </summary>
     public class MySqlUser : IUserPlugin
     {
-        MySqlConnection _dcUser;
+        /// <summary>
+        /// Connection to database
+        /// </summary>
+        MySqlConnection conn;
+        /// <summary>
+        /// Constructor for database connection
+        /// </summary>
         public MySqlUser()
         {
-            _dcUser = new MySqlConnection("server=142.93.114.73;database=donbstringham;user=donbstringham;password=letmein");
+            //Example connection
+            //conn = new MySqlConnection("server=142.93.114.73;database=donbstringham;user=donbstringham;password=letmein");
+            conn = new MySqlConnection("server=142.93.114.73;database=AlexHamlet;user=AlexHamlet;password=letmein");
             try
             {
-                _dcUser.Open();
+                conn.Open();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.ToString());
             }
         }
+        /// <summary>
+        /// Closes database connection
+        /// </summary>
         public void Close()
         {
-            _dcUser.Close();
+            conn.Close();
         }
+        /// <summary>
+        /// Creates User, stores in database
+        /// </summary>
+        /// <param name="obj">User object to Create</param>
         public void Create(IEntity obj)
         {
-            User user = (User)obj;
             try
             {
+                User user = (User)obj;
                 DateTime now = DateTime.Now;
+                //Don't change the SQL, if it works for Don, it works for me.
                 string sql = "INSERT INTO users (sys_id, email, dttm_registration, dttm_last_login) VALUES ('"
                      + user.Id + "', '"
                      + user.Email + "', '"
                      + now.ToString("yyyy-MM-dd HH:mm:ss")
                      + "', '" + now.ToString("yyyy-MM-dd HH:mm:ss") + "')";
-                MySqlCommand cmd = new MySqlCommand(sql, _dcUser);
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -46,13 +65,16 @@ namespace BlabberApp.DataStore.Plugins
                 throw new Exception(ex.ToString());
             }
         }
-
+        /// <summary>
+        /// Get all users from database
+        /// </summary>
+        /// <returns>IEnumerable of User objects</returns>
         public IEnumerable ReadAll()
         {
             try
             {
                 string sql = "SELECT * FROM users";
-                MySqlDataAdapter daUser = new MySqlDataAdapter(sql, _dcUser); // To avoid SQL injection.
+                MySqlDataAdapter daUser = new MySqlDataAdapter(sql, conn); // To avoid SQL injection.
                 MySqlCommandBuilder cbUser = new MySqlCommandBuilder(daUser);
                 DataSet dsUsers = new DataSet();
 
@@ -72,13 +94,17 @@ namespace BlabberApp.DataStore.Plugins
                 throw new Exception(ex.ToString());
             }
         }
-
+        /// <summary>
+        /// Get User object by GUID
+        /// </summary>
+        /// <param name="Id">User GUID</param>
+        /// <returns>User associated with GUID</returns>
         public IEntity ReadById(Guid Id)
         {
             try
             {
                 string sql = "SELECT * FROM users WHERE users.sys_id = '" + Id.ToString() + "'";
-                MySqlDataAdapter daUser = new MySqlDataAdapter(sql, _dcUser); // To avoid SQL injection.
+                MySqlDataAdapter daUser = new MySqlDataAdapter(sql, conn); // To avoid SQL injection.
                 MySqlCommandBuilder cbUser = new MySqlCommandBuilder(daUser);
                 DataSet dsUser = new DataSet();
 
@@ -93,12 +119,18 @@ namespace BlabberApp.DataStore.Plugins
                 throw new Exception(ex.ToString());
             }
         }
-        public IEntity ReadByUserEmail(string Id)
+        /// <summary>
+        /// Gets User by Email
+        /// </summary>
+        /// <param name="email">User Email</param>
+        /// <returns>User associated with Email</returns>
+        public IEntity ReadByUserEmail(string email)
         {
             try
             {
-                string sql = "SELECT * FROM users WHERE users.email = '" + Id.ToString() + "'";
-                MySqlDataAdapter daUser = new MySqlDataAdapter(sql, _dcUser); // To avoid SQL injection.
+                //Too afraid to change the SQL, still don't think tostring is necessary.
+                string sql = "SELECT * FROM users WHERE users.email = '" + email.ToString() + "'";
+                MySqlDataAdapter daUser = new MySqlDataAdapter(sql, conn); // To avoid SQL injection.
                 MySqlCommandBuilder cbUser = new MySqlCommandBuilder(daUser);
                 DataSet dsUser = new DataSet();
 
@@ -113,24 +145,40 @@ namespace BlabberApp.DataStore.Plugins
                 throw new Exception(ex.ToString());
             }
         }
-
+        /// <summary>
+        /// I'm not sure this works, but I'll troubleshoot it later.
+        /// </summary>
+        /// <param name="obj"></param>
         public void Update(IEntity obj)
         {
-            User user = (User)obj;
+            try
+            {
+                User user = (User)obj;
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
-
+        /// <summary>
+        /// Deletes User from database
+        /// </summary>
+        /// <param name="obj">User Object to delete</param>
         public void Delete(IEntity obj)
         {
-            User user = (User)obj;
             try{
+                User user = (User)obj;
                 string sql = "DELETE FROM users WHERE users.email='"+user.Email+"'";
-                MySqlCommand cmd = new MySqlCommand(sql, _dcUser);
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.ExecuteNonQuery();
             } catch(Exception ex) {
                 throw new Exception(ex.ToString());
             }
         }
-
+        /// <summary>
+        /// Converts query results to User objects
+        /// </summary>
+        /// <param name="row">Data row to User</param>
+        /// <returns>User object</returns>
         private User DataRow2User(DataRow row)
         {
             User user = new User();

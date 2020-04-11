@@ -6,36 +6,63 @@ using BlabberApp.Domain.Interfaces;
 
 namespace BlabberApp.DataStore.Plugins
 {
+    /// <summary>
+    /// Reworked InMemory storage to match Don's
+    /// </summary>
     public class InMemory : IBlabPlugin, IUserPlugin
     {
+        /// <summary>
+        /// List of Objects (Users or Blabs)
+        /// </summary>
         private ArrayList buffer;
+
+        /// <summary>
+        /// Constructor for InMemory Storage (Not persistant)
+        /// </summary>
         public InMemory()
         {
-            this.buffer = new ArrayList();
+            buffer = new ArrayList();
         }
 
+        /// <summary>
+        /// Creates the object in memory
+        /// </summary>
+        /// <param name="obj">IEntity object</param>
         public void Create(IEntity obj)
         {
-            this.buffer.Add(obj);
+            buffer.Add(obj);
         }
 
+        /// <summary>
+        /// Returns entire InMemory object
+        /// </summary>
+        /// <returns>IEnumerable of IEntity Objects</returns>
         public IEnumerable ReadAll()
         {
-            return this.buffer;
+            return buffer;
         }
 
+        /// <summary>
+        /// Gets object by GUID
+        /// </summary>
+        /// <param name="Id">GUID of object</param>
+        /// <returns>Object associated with given GUID</returns>
         public IEntity ReadById(Guid Id)
         {
-            foreach(IEntity obj in this.buffer)
+            foreach(IEntity obj in buffer)
             {
                 if (Id.Equals(obj.Id)) return obj;
             }
             return null;
         }
-        public IEnumerable ReadByUserId(string Id)
-        {
-            return null;
-        }
+
+        /// <summary>
+        /// Gets object by User email.
+        /// 
+        /// I think this only works for User objects
+        /// </summary>
+        /// <param name="email">Email</param>
+        /// <returns>User associated with Email</returns>
         public IEntity ReadByUserEmail(string email)
         {
             foreach(User user in buffer)
@@ -48,15 +75,33 @@ namespace BlabberApp.DataStore.Plugins
             return null;
         }
 
+        /// <summary>
+        /// Update Object
+        /// </summary>
+        /// <param name="obj">Object to update</param>
         public void Update(IEntity obj)
         {
-            this.Delete(obj);
-            this.Create(obj);
+            Delete(obj);
+            Create(obj);
         }
 
+        /// <summary>
+        /// Deletes object from memory
+        /// </summary>
+        /// <param name="obj">Object to delete</param>
         public void Delete(IEntity obj)
         {
-            this.buffer.Remove(obj);
+            buffer.Remove(obj);
+        }
+
+        /// <summary>
+        /// Not used, but required per the IBlabPlugin
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public IEnumerable ReadByUserId(string Id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,12 +14,6 @@ namespace BlabberApp.ServicesTest
         private BlabServiceFactory _blabServiceFactory = new BlabServiceFactory();
 
         [TestMethod]
-        public void TestCanary()
-        {
-            Assert.AreEqual(true, true);
-        }
-
-        [TestMethod]
         public void GetAllEmptyTest()
         {
             //Arrange

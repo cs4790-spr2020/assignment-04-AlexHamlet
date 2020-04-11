@@ -14,12 +14,6 @@ namespace BlabberApp.ServicesTest
         UserServiceFactory harness = new UserServiceFactory();
 
         [TestMethod]
-        public void CanaryTest()
-        {
-            Assert.AreEqual(true, true);
-        }
-
-        [TestMethod]
         public void BuildAdapterPluginTest()
         {
             //Arrange and Act

@@ -8,37 +8,56 @@ using BlabberApp.Domain.Interfaces;
 
 namespace BlabberApp.DataStore.Plugins
 {
+    /// <summary>
+    /// Stores Blabs in the database
+    /// </summary>
     public class MySqlBlab : IBlabPlugin
     {
-        MySqlConnection dcBlab;
+        /// <summary>
+        /// Connection to the database
+        /// </summary>
+        MySqlConnection conn;
+        /// <summary>
+        /// Constructor for Database object
+        /// </summary>
         public MySqlBlab()
         {
-            this.dcBlab = new MySqlConnection("server=142.93.114.73;database=donbstringham;user=donbstringham;password=letmein");
+            //Example Connection
+            //this.dcBlab = new MySqlConnection("server=142.93.114.73;database=donbstringham;user=donbstringham;password=letmein");
+            conn = new MySqlConnection("server=142.93.114.73;database=AlexHamlet;user=AlexHamlet;password=letmein");
             try
             {
-                this.dcBlab.Open();
+                conn.Open();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.ToString());
             }
         }
+        /// <summary>
+        /// Closes connection to database
+        /// </summary>
         public void Close()
         {
-            this.dcBlab.Close();
+            conn.Close();
         }
+        /// <summary>
+        /// Creates a Blab object in the database
+        /// </summary>
+        /// <param name="obj"></param>
         public void Create(IEntity obj)
-        {
-            Blab blab = (Blab)obj;
+        {   
             try
             {
+                Blab blab = (Blab)obj;
                 DateTime now = DateTime.Now;
+                //Use Don's SQL, it worked when he did it. Don't change
                 string sql = "INSERT INTO blabs (sys_id, message, dttm_created, user_id) VALUES ('"
                      + blab.Id + "', '"
                      + blab.Message + "', '"
                      + now.ToString("yyyy-MM-dd HH:mm:ss") + "', '"
                      + blab.User.Email + "')";
-                MySqlCommand cmd = new MySqlCommand(sql, this.dcBlab);
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.ExecuteNonQuery();
             }
             catch (Exception ex)
@@ -46,14 +65,17 @@ namespace BlabberApp.DataStore.Plugins
                 throw new Exception(ex.ToString());
             }
         }
-
+        /// <summary>
+        /// Returns all Blabs from the database
+        /// </summary>
+        /// <returns>IEnumerable of Blab objects</returns>
         public IEnumerable ReadAll()
         {
             try
             {
                 // SELECT * FROM blabs WHERE blabs.dttm_created NOT over a week ago SORTED DESC BY blabs.dttm_created
                 string sql = "SELECT * FROM blabs";
-                MySqlDataAdapter daBlabs = new MySqlDataAdapter(sql, this.dcBlab); // To avoid SQL injection.
+                MySqlDataAdapter daBlabs = new MySqlDataAdapter(sql, this.conn); // To avoid SQL injection.
                 MySqlCommandBuilder cbBlabs = new MySqlCommandBuilder(daBlabs);
                 DataSet dsBlabs = new DataSet();
 
@@ -73,13 +95,18 @@ namespace BlabberApp.DataStore.Plugins
                 throw new Exception(ex.ToString());
             }
         }
-
+        /// <summary>
+        /// Read Blab by GUID
+        /// </summary>
+        /// <param name="Id">GUID of Blab</param>
+        /// <returns>Blab associated with GUID</returns>
         public IEntity ReadById(Guid Id)
         {
             try
             {
+                //Don't change Don's SQL
                 string sql = "SELECT * FROM blabs WHERE blabs.sys_id = '" + Id.ToString() + "'";
-                MySqlDataAdapter daBlab = new MySqlDataAdapter(sql, this.dcBlab); // To avoid SQL injection.
+                MySqlDataAdapter daBlab = new MySqlDataAdapter(sql, conn); // To avoid SQL injection.
                 MySqlCommandBuilder cbBlab = new MySqlCommandBuilder(daBlab);
                 DataSet dsBlab = new DataSet();
 
@@ -97,13 +124,18 @@ namespace BlabberApp.DataStore.Plugins
                 throw new Exception(ex.ToString());
             }
         }
-
+        /// <summary>
+        /// Returns Blabs associated with a User email
+        /// </summary>
+        /// <param name="email">User email</param>
+        /// <returns>IEnumerable of Blabs from User</returns>
         public IEnumerable ReadByUserId(string email)
         {
             try
             {
+                //Don't change Don's SQL
                 string sql = "SELECT * FROM blabs WHERE blabs.user_id = '" + email.ToString() + "'";
-                MySqlDataAdapter daBlabs = new MySqlDataAdapter(sql, this.dcBlab); // To avoid SQL injection.
+                MySqlDataAdapter daBlabs = new MySqlDataAdapter(sql, conn); // To avoid SQL injection.
                 MySqlCommandBuilder cbBlabs = new MySqlCommandBuilder(daBlabs);
                 DataSet dsBlabs = new DataSet();
 
@@ -123,15 +155,36 @@ namespace BlabberApp.DataStore.Plugins
                 throw new Exception(ex.ToString());
             }
         }
-
+        /// <summary>
+        /// I don't believe this works, but I'll troubleshoot it later.
+        /// </summary>
+        /// <param name="obj"></param>
         public void Update(IEntity obj)
         {
-            Blab blab = (Blab)obj;
+            try
+            {
+                Blab blab = (Blab)obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
 
+        /// <summary>
+        /// I don't believe this works, but I'll troubleshoot it later.
+        /// </summary>
+        /// <param name="obj"></param>
         public void Delete(IEntity obj)
         {
-            Blab blab = (Blab)obj;
+            try
+            {
+                Blab blab = (Blab)obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
         }
     }
 }
