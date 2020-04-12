@@ -8,36 +8,39 @@ using BlabberApp.Services;
 
 namespace BlabberApp.ServicesTest
 {
+    /// <summary>
+    /// After I ask more questions and understand what Services do, I'll write my own tests.
+    /// If these tests fail, I know I broke something.
+    /// These should be identical to Don's tests.
+    /// </summary>
     [TestClass]
     public class BlabServiceTest
     {
-        private BlabServiceFactory _blabServiceFactory = new BlabServiceFactory();
+        private BlabServiceFactory blabServiceFactory = new BlabServiceFactory();
 
+        /// <summary>
+        /// Appears to be an in memory Test ensuring that empty lists do not return anything.
+        /// </summary>
         [TestMethod]
         public void GetAllEmptyTest()
         {
-            //Arrange
-            BlabService blabService = _blabServiceFactory.CreateBlabService();
+            BlabService blabService = blabServiceFactory.CreateBlabService();
             ArrayList expected = new ArrayList();
-            //Act
             IEnumerable actual = blabService.GetAll();
-            //Assert
             Assert.AreEqual(expected.Count, (actual as ArrayList).Count);
         }
-
+        /// <summary>
+        /// Appears to be an in memory test ensuring that after adding a blab you can get that blab.
+        /// </summary>
         [TestMethod]
         public void AddNewBlabSuccessTest()
         {
-            //Arrange
             string email = "user@example.com";
-            string msg = "Prow scuttle parrel provost Sail ho shrouds spirits boom mizzenmast yardarm.";
-            BlabService blabService = _blabServiceFactory.CreateBlabService();
+            string msg = "Blab, Blab, Blab";
+            BlabService blabService = blabServiceFactory.CreateBlabService();
             Blab blab = blabService.CreateBlab(msg, email);
             blabService.AddBlab(blab);
-            //Act
             Blab actual = (Blab)blabService.FindUserBlabs(email);
-            //Assert
-            // Assert.AreEqual(blab.Message, actual.Message);
         }
     }
 }

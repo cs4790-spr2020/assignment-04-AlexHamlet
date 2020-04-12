@@ -4,46 +4,51 @@ using BlabberApp.Domain.Entities;
 
 namespace BlabberApp.DomainTest.Entities
 {
+    /// <summary>
+    /// I have rewritten Blab and User to match Don's
+    /// This ensures that the sql given works!
+    /// 
+    /// User is the User equivalent to Twitter.
+    /// </summary>
     [TestClass]
     public class BlabTest
     {       
-        private Blab harness;
+        private Blab blab;
         public BlabTest() 
         {
-            harness = new Blab();
+            blab = new Blab();
         }
+        /// <summary>
+        /// enusres that we can get the Blab message
+        /// </summary>
         [TestMethod]
         public void TestSetGetMessage()
         {
-            // Arrange
-            string expected = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."; 
-            harness.Message = "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...";
-            // Act
-            string actual = harness.Message;
-            // Assert
+            string expected = "Blab, Blab, Blab"; 
+            blab.Message = "Blab, Blab, Blab";
+            string actual = blab.Message;
             Assert.AreEqual(actual, expected);
         }
 
+        /// <summary>
+        /// Ensures that we can get the id
+        /// </summary>
         [TestMethod]
         public void TestId()
         {
-            // Arrange
-            Guid expected = harness.Id;
-            // Act
-            Guid actual = harness.Id;
-            // Assert
+            Guid expected = blab.Id;
+            Guid actual = blab.Id;
             Assert.AreEqual(actual, expected);
-            Assert.AreEqual(true, harness.Id is Guid);
         }
-        
+
+        /// <summary>
+        /// Tests Blab time
+        /// </summary>
         [TestMethod]
         public void TestDTTM()
         {
-            // Arrange
             Blab Expected = new Blab();
-            // Act
             Blab Actual = new Blab();
-            // Assert
             Assert.AreEqual(Expected.DTTM.ToString(), Actual.DTTM.ToString());
         }
     }

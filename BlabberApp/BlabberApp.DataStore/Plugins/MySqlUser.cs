@@ -49,6 +49,15 @@ namespace BlabberApp.DataStore.Plugins
         {
             try
             {
+                ////TEMP
+                //string tempsql = "CREATE TABLE `AlexHamlet`.`users` (`id` INT NOT NULL AUTO_INCREMENT,  `sys_id` VARCHAR(36) NOT NULL,  `email` VARCHAR(255) NULL,  `dttm_registration` DATETIME NULL,  `dttm_last_login` DATETIME NULL,  PRIMARY KEY(`id`),  UNIQUE INDEX `Id_UNIQUE` (`id` ASC),  UNIQUE INDEX `sys_id_UNIQUE` (`sys_id` ASC)); ";
+                //MySqlCommand tempcmd = new MySqlCommand(tempsql, conn);
+                //tempcmd.ExecuteNonQuery();
+                //tempsql = "CREATE TABLE `AlexHamlet`.`blabs` (  `id` INT NOT NULL AUTO_INCREMENT,  `sys_id` VARCHAR(36) NOT NULL,  `message` VARCHAR(255) NULL,  `dttm_created` DATETIME NOT NULL,  `user_id` VARCHAR(36) NOT NULL,  PRIMARY KEY(`id`),  UNIQUE INDEX `id_UNIQUE` (`id` ASC),  UNIQUE INDEX `sys_id_UNIQUE` (`sys_id` ASC)); ";
+                //tempcmd = new MySqlCommand(tempsql, conn);
+                //tempcmd.ExecuteNonQuery();
+                /////TEMP
+
                 User user = (User)obj;
                 DateTime now = DateTime.Now;
                 //Don't change the SQL, if it works for Don, it works for me.
